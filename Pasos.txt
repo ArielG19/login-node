@@ -1,0 +1,6 @@
+1. crear el package con npm init
+2. intalar express, express-session para manejar sesion, cookie-parser para administrar las cookies en el 
+navegador, connect-flash para pintar mensajes cunado el usurio tenga errores de logeo
+ejs que es un motor de plantilla, bcrypt-nodejs para encriptar, body-parser para entender los datos que lleguen
+del navegador al servidor, mongoose para connectarnos a la bd, morgan para registrar peticiones http
+y mostrarlas por consola, passport para autentificar, passport-local
