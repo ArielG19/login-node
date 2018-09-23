@@ -11,9 +11,14 @@ module.exports = (app,passport) =>{
             message: req.flash('LoginMessage')
         });
     });
-    app.post('/login',(req,res)=>{
-        
-    });
+   
+    //utilizamos passport para registro y autenticacion
+    app.post('/login', passport.authenticate('local-login', {
+		successRedirect: '/dashboard',
+		failureRedirect: '/login',
+		failureFlash: true
+	}));
+
     //-----------------------------------------------------------------------------------------------
     app.get('/signup',(req,res)=>{
         res.render('signup',{
@@ -29,10 +34,26 @@ module.exports = (app,passport) =>{
         failureFlash:true
     }));
 
-    app.get('/dashboard',(req,res)=>{
+    //pasamos el metodo isloggedIn para que compruebe si esta autentificado
+    app.get('/dashboard',isLoggedIn,(req,res)=>{
         res.render('dashboard',{
             //obtenemos un obejto de passport con los datos de usuario
-            user:req.user
+            user: req.user
         });
     });
+    //ruta para terminar sesion
+    app.get('/logout',(req,res)=>{
+        req.logout();
+        res.redirect('/');
+    });
+
+    //funcion para saber si esta logueado
+    function isLoggedIn(req,res,next){
+        //si esta autenticado q continue con la ruta
+        if(req.isAuthenticated()){
+            return next()
+        }
+        //sino retorne al home
+        return res.redirect('/')
+    }
 };

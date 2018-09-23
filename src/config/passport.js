@@ -4,7 +4,7 @@ const User = require('../app/models/user');
 
 module.exports = function(passport){
         passport.serializeUser(function(user,done){
-            done(null,user.id);
+            done(null, user.id);
         });
 
         passport.deserializeUser(function(id,done){
@@ -50,29 +50,28 @@ module.exports = function(passport){
         }));
 
         //Login ---------------------------------------------------------------------------------------------
-        passport.use('local-login',new localStrategy({
+        passport.use('local-login', new localStrategy({
             usernameField:'email',
             passwordField:'password',
             passReqToCallback:true
         },
         function(req,email,password,done){
 
-                User.findOne({'local.email':email},function(err,user){
+                User.findOne({'local.email': email},function(err,user){
                         //si hay un error retornamos el error
                         if(err){
                             return done(err);
                         }
                         //si el usuario no existe
                         if(!user){
-                            return done(null,false,req.flash('LoginMessage','El usuario no esta registrado'));
+                            return done(null,false, req.flash('LoginMessage','El usuario no esta registrado'));
                         }
-                        if(!user.validatePassword(password)){
+                        if(!user.validPassword(password)){
                             //sino procedemos a crear nuestros datos
-                            return done(null,false,req.flash('LoginMessage','Los datos no coinciden'));
-                                //si no hay error retornamos el usuario guardado
-                                return done(null,user);
-                           
+                            return done(null, false, req.flash('LoginMessage','Los datos no coinciden'));
+                                //si no hay error retornamos el usuario guardado                           
                         }
+                        return done(null,user);
 
                 })
         }));
